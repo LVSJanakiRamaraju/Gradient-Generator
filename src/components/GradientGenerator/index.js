@@ -1,5 +1,13 @@
 import {Component} from 'react'
-
+import {
+  MainContainer,
+  Heading,
+  Para,
+  ButtonsContainer,
+  GenerateButton,
+  ColorValuesContainer,
+  ColorInputsContainer,
+} from './styledComponents'
 import GradientDirectionItem from '../GradientDirectionItem'
 
 const gradientDirectionsList = [
@@ -8,48 +16,81 @@ const gradientDirectionsList = [
   {directionId: 'RIGHT', value: 'right', displayText: 'Right'},
   {directionId: 'LEFT', value: 'left', displayText: 'Left'},
 ]
+// Write your code here
 
 class GradientGenerator extends Component {
-  state = {active: 'TOP', color1: '#8ae323', color2: '#014f7b'}
-
-  onchangeC1 = e => {
-    this.setState({color1: e.target.value})
+  state = {
+    activeDirection: gradientDirectionsList[0].value,
+    activeColor1: '#8ae323',
+    activeColor2: '#014f7b',
+    gradientValue: `to ${gradientDirectionsList[0].value}, #8ae323, #014f7b`,
   }
 
-  onchangeC2 = e => {
-    this.setState({color2: e.target.value})
+  onChangeColor1 = event => {
+    this.setState({activeColor1: event.target.value})
   }
 
-  onchangeActive = id => {
-    this.setState({active: id})
+  onChangeColor2 = event => {
+    this.setState({activeColor2: event.target.value})
+  }
+
+  onGenerateGradient = () => {
+    const {activeDirection, activeColor1, activeColor2} = this.state
+    this.setState({
+      gradientValue: ` to ${activeDirection}, ${activeColor1}, ${activeColor2}`,
+    })
+  }
+
+  onChangeDirection = value => {
+    this.setState({activeDirection: value})
   }
 
   render() {
-    const {active, color1, color2} = this.state
+    const {
+      activeDirection,
+      activeColor1,
+      activeColor2,
+      gradientValue,
+    } = this.state
+
     return (
-      <div data-testid="gradientGenerator">
-        <h1>Generate a CSS Color Gradient</h1>
-        <p>Choose Direction</p>
-        <ul>
-          {gradientDirectionsList.map(each => (
+      <MainContainer
+        gradientValue={gradientValue}
+        data-testid="gradientGenerator"
+      >
+        <Heading>Generate a CSS Color Gradient</Heading>
+        <Para>Choose Direction</Para>
+        <ButtonsContainer>
+          {gradientDirectionsList.map(eachItem => (
             <GradientDirectionItem
-              key={each.directionId}
-              item={each}
-              active={active}
-              onchangeActive={this.onchangeActive}
+              gradientButtonDetails={eachItem}
+              key={eachItem.directionId}
+              onChangeDirection={this.onChangeDirection}
+              active={eachItem.value === activeDirection}
             />
           ))}
-        </ul>
-
-        <p>Pick the Colors</p>
-        <p>{color1}</p>
-        <p>{color2}</p>
-
-        <input type="color" value={color1} onChange={this.onchangeC1} />
-        <input type="color" value={color2} onChange={this.onchangeC2} />
-
-        <button type="button">Generate</button>
-      </div>
+        </ButtonsContainer>
+        <Para>Pick the Colors</Para>
+        <ColorValuesContainer>
+          <Para>{activeColor1}</Para>
+          <Para>{activeColor2}</Para>
+        </ColorValuesContainer>
+        <ColorInputsContainer>
+          <input
+            type="color"
+            value={activeColor1}
+            onChange={this.onChangeColor1}
+          />
+          <input
+            type="color"
+            value={activeColor2}
+            onChange={this.onChangeColor2}
+          />
+        </ColorInputsContainer>
+        <GenerateButton type="button" onClick={this.onGenerateGradient}>
+          Generate
+        </GenerateButton>
+      </MainContainer>
     )
   }
 }

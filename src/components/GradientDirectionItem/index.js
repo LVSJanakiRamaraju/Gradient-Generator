@@ -1,24 +1,23 @@
-import {StyledLi} from './styledComponents'
+import {DirectionButton, DirectionItem} from './styledComponents'
 
 const GradientDirectionItem = props => {
-  const {item, active, onchangeActive} = props
-  const {directionId, value, displayText} = item
+  const {gradientButtonDetails, onChangeDirection, active} = props
+  const {displayText, value} = gradientButtonDetails
 
-  onchange = () => {
-    onchangeActive(directionId)
+  const onClickDirectionItem = () => {
+    onChangeDirection(value)
   }
 
   return (
-    <li key={value}>
-      <StyledLi
+    <DirectionItem>
+      <DirectionButton
         type="button"
-        value={directionId}
-        opacity={active}
-        onClick={onchange}
+        active={active}
+        onClick={onClickDirectionItem}
       >
         {displayText}
-      </StyledLi>
-    </li>
+      </DirectionButton>
+    </DirectionItem>
   )
 }
 
